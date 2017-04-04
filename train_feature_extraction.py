@@ -2,6 +2,12 @@ import pickle
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from alexnet import AlexNet
+import time
+import numpy as np
+import pandas as pd
+from scipy.misc import imread
+from sklearn.utils import shuffle
+
 
 sign_names = pd.read_csv('signnames.csv')
 nb_classes = 43
@@ -14,6 +20,8 @@ X, y = train['features'], train['labels']
 # TODO: Split data into training and validation sets.
 X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.33, random_state=42)
 BATCH_SIZE = 128
+rate = 0.01
+EPOCHS = 10
 
 # rs = ShuffleSplit(n_splits=5, train_size=0.25, test_size=.125, random_state=0)
 # for train_index, test_index in rs.split(X):
@@ -77,7 +85,7 @@ with tf.Session() as sess:
         for offset in range(0, num_examples, BATCH_SIZE):
             end = offset + BATCH_SIZE
             batch_x, batch_y = X_train[offset:end], y_train[offset:end]
-            sess.run(training_operation, feed_dict={x: batch_x, y: batch_y, keep_prob: dropout})
+            sess.run(training_operation, feed_dict={x: batch_x, y: batch_y})
             
         training_accuracy = evaluate(X_train, y_train)
         validation_accuracy = evaluate(normalize(rgb2gray(X_valid)), y_valid)
