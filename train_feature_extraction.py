@@ -3,6 +3,9 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from alexnet import AlexNet
 
+sign_names = pd.read_csv('signnames.csv')
+nb_classes = 43
+
 # TODO: Load traffic signs data. CHANGE
 with open('train.p', mode='rb') as f:
     train = pickle.load(f)
